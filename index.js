@@ -2,12 +2,16 @@ const express=require("express");
 const mongoose=require("mongoose");
 
 const userRouter=require('./routes/user');
+const { checkForAuthenticationCookie } = require("./middlewares/authentication");
 
 const app=express();
 
 const PORT=8000;
 
 app.use(express.json());
+
+app.use(checkForAuthenticationCookie("token"));
+
 app.use('/user',userRouter);
 
 

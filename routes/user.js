@@ -14,14 +14,25 @@ router.get("/signup",(req,res)=>{
 });
 
 router.post("/signup",async (req,res)=>{
-    console.log("body:",req.body);
     const {fullName,email,password}=req.body;
     await User.create({
         fullName,
         email,
         password,
     })
+
+    res.status(201).json({message:'account created successfully'})
 });
 
+router.post("/signin",async (req,res)=>{
+    const {email,password}=req.body;
+    try{
+        const token=await User.matchPasswordandGenerateToken(email,password);
+        return res.cookie("token",token).status(201).json({message:"login successfull"});
+    }catch(error){
+        res.json({error:"incorrect email or password"});
+    }
+   
+})
 
 module.exports=router;
