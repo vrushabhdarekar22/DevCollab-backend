@@ -18,6 +18,8 @@ function createTokenForUser(user){
 function verifyToken(token){
     try{
         const payLoad=JWT.verify(token,secret);
+        console.log('payload',payLoad);
+        
         return payLoad;
     }catch(error){
         console.log('JWT verification error',error.message);

@@ -37,8 +37,15 @@ const userSchema=new Schema({
     profileImage:{
         type:String,
         default:"",
-    }
-   
+    },
+    ownedProjects:{
+        type: Schema.Types.ObjectId,
+        ref: 'Project',
+    },
+    joinedProjects:{
+        type: Schema.Types.ObjectId,
+        ref: 'Project',
+    },
 },{timestamps:true});
 
 //after signup =>we will hash password
