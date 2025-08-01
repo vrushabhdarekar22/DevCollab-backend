@@ -13,8 +13,13 @@ const projectSchema=new Schema({
         ref:"user",
     },
     members:[{
-        type:Schema.Types.ObjectId,
-        ref:"user",
+        user:{
+            type:Schema.Types.ObjectId,
+            ref:"user"
+        },
+        role:{
+            type:String
+        },
     }],
     status:{
         type:String,
@@ -28,6 +33,9 @@ const projectSchema=new Schema({
         },
         message:{
             type:String,
+        },
+        role:{
+            type:String
         },
         status:{
             type:String,

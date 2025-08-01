@@ -38,14 +38,14 @@ const userSchema=new Schema({
         type:String,
         default:"",
     },
-    ownedProjects:{
+    ownedProjects:[{
         type: Schema.Types.ObjectId,
         ref: 'Project',
-    },
-    joinedProjects:{
+    }],
+    joinedProjects:[{
         type: Schema.Types.ObjectId,
         ref: 'Project',
-    },
+    }],
 },{timestamps:true});
 
 //after signup =>we will hash password
