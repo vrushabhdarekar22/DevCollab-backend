@@ -35,4 +35,56 @@ router.post("/signin",async (req,res)=>{
    
 })
 
+
+//update profile
+router.put("/profile",async (req,res)=>{
+    const userId=req.user._id;
+    const {fullName,bio,skills,githubURL,linkedinURL,profileImage}=req.body;
+
+    try{
+        const updatedUser=await User.findByIdAndUpdate(userId,
+            {fullName
+                ,bio
+                ,skills
+                ,githubURL,
+                linkedinURL
+                ,profileImage},
+                {new:true,runValidators:true})
+        
+                
+        res.status(201).json({message:"profile updated successfuly"});
+    }catch(error){
+        console.error("profile update failed");
+        res.status(500).json({error:'internal server error'});
+    }
+})
+
+router.get("/profile",async (req,res)=>{  
+    try{
+        const userId=req.user._id;
+        const user=await User.findById(userId).select('-password -salt -createdAt -updatedAt');
+
+        if(!user) return res.status(404).json({error:'user not found'});
+        res.json(user);
+    }catch(error){
+        console.error("error faitching own profile");
+        res.status(500).json({error:'internal server error'});
+    }
+})
+
+
+router.get("/profile/:id",async (req,res)=>{
+    try{
+        const {id:userId}=req.params;
+        const user=await User.findById(userId).select('fullName email bio skills githubURL linkedinURL profileImage projects');
+
+        if(!user) return res.status(404).json({error:'user not found'});
+        res.json(user);
+    }catch(error){
+        console.error("error faitching other`s profile");
+        res.status(500).json({error:'internal server error'});
+    }
+    
+
+})
 module.exports=router;

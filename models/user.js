@@ -46,6 +46,9 @@ const userSchema=new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Project',
     }],
+    projects:{
+        type:String,
+    }
 },{timestamps:true});
 
 //after signup =>we will hash password

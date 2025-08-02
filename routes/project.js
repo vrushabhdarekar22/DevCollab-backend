@@ -169,7 +169,7 @@ router.post('/:id/requests/:userId/reject',checkForAuthorization, async (req,res
             return res.json({message:"request already rejected"})
         }
                                          
-        request.status='rejected';
+        // request.status='rejected';
 
         await Project.findByIdAndUpdate(projectId, {
             $pull: { joinRequests: {user:userId }}
