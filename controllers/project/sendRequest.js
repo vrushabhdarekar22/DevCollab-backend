@@ -1,3 +1,5 @@
+const Project = require("../../models/project");
+
 async function toSendRequest(req,res){
 
     try{
@@ -5,14 +7,19 @@ async function toSendRequest(req,res){
         const userId=req.user._id;
         const {message}=req.body;
     
-        const project=await Project.findById(req.params.id);
+        const project=await Project.findById(req.body.projectId);
     
         if(!project){
             return res.status(404).json({message:'project not found'});
         }
     
-        const alreadyRequested=project.joinRequests.some(r => r.user.toString()===userId.toString());
-        const alreadyMember=project.members.includes(userId);
+        // Owner can't send join request to own project
+        if (project.createdBy.toString() === userId.toString()) {
+            return res.status(403).json({ message: 'Project owner cannot request to join the same project' });
+        }
+
+        const alreadyRequested = project.joinRequests.some(r => r.user.toString() === userId.toString());
+        const alreadyMember = project.members.some(m => m.user.toString() === userId.toString());
     
         if(alreadyRequested || alreadyMember){
             return res.json({message:'already member or requested'});

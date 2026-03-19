@@ -1,6 +1,8 @@
 const {Schema,model}=require("mongoose");
+
 const {createHmac,randomBytes}=require('crypto');
 const {createTokenForUser}=require('../services/authentication')
+
 const userSchema=new Schema({
     fullName:{
         type:String,
@@ -92,3 +94,7 @@ userSchema.static('matchPasswordandGenerateToken',async function(email,password)
 const User=model("user",userSchema);
 
 module.exports=User;
+
+
+
+

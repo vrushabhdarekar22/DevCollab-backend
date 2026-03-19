@@ -1,8 +1,13 @@
 const Project = require("../../models/project");
+const User = require("../../models/user");
 
 async function toCreateProject(req,res){
 
     try{
+
+        if (!req.user) {
+            return res.status(401).json({ error: "Unauthorized: please log in" });
+        }
 
         // console.log(req.user);
         const {title,description}=req.body;
@@ -10,6 +15,10 @@ async function toCreateProject(req,res){
             title,
             description,
             createdBy:req.user._id,
+            members: [{
+                user: req.user._id,
+                role: "owner" 
+            }]
         })
         console.log('project:',project);
         

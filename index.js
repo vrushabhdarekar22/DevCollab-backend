@@ -1,4 +1,3 @@
-
 require("dotenv").config({ override: true });
 // console.log("DEBUG MONGO_URL =", process.env.MONGO_URL);
 
@@ -18,12 +17,15 @@ const PORT=process.env.PORT || 8000;
 mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log("MongoDB Atlas connected"));
 
+  // console.log(process.env.MONGO_URI);
+
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(checkForAuthenticationCookie("token"));
 
 app.use('/user',userRouter);
-app.use('/projects',projectRouter);
+app.use('/project',projectRouter);
 
   
 

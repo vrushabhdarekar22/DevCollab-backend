@@ -21,6 +21,7 @@ async function toAcceptRequest(req,res){
         if(!request){
             return res.status(404).json({error:'request not found'});
         }
+        
         if(request.status==="accepted"){
             return res.json({message:"request already accepted"})
         }

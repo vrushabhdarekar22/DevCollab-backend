@@ -16,6 +16,7 @@ router.post("/signin",toLogin);
 router.get("/view-profile",getProfile);
 //update profile
 router.put("/update-profile",toUpdateProfile);
-router.get("/view-others-profile",toViewOthersProfile);
+router.get("/view-others-profile/:id",toViewOthersProfile);
+
 
 module.exports=router;

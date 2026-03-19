@@ -12,13 +12,13 @@ const {toRejectRequest} = require("../controllers/project/rejectRequest");
 
 
 router.post('/create-project',toCreateProject);
-router.get('/view-project',toViewProject);//projects/id
+router.get('/view-project/:id',toViewProject);//projects/id
 
 
 router.post('/send-request',toSendRequest);
-router.get('/view-request',checkForAuthorization, toViewRequest);//project request only owner can see
-router.post('/accept-request',checkForAuthorization,toAcceptRequest);
-router.post('/reject-request',checkForAuthorization, toRejectRequest);
+router.get('/view-request/:id',checkForAuthorization, toViewRequest);//project request only owner can see
+router.post('/accept-request/:id/:userId',checkForAuthorization,toAcceptRequest);
+router.post('/reject-request/:id/:userId',checkForAuthorization, toRejectRequest);
 
 
 module.exports=router;

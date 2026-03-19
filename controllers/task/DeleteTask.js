@@ -1,0 +1,30 @@
+const Task = require("../../models/task")
+
+async function toDeleteTask(req, res) {
+  try {
+    const { taskId } = req.params;
+    const userId = req.user.id;
+
+    const task = await Task.findById(taskId);
+
+    if (!task) {
+      return res.status(404).json({ success: false, message: "Task not found" });
+    }
+
+    if (task.createdBy.toString() !== userId) {
+      return res.status(403).json({ success: false, message: "Only owner can delete" });
+    }
+
+    await Task.findByIdAndDelete(taskId);
+
+    return res.status(200).json({
+      success: true,
+      message: "Task deleted"
+    });
+
+  } catch (err) {
+    return res.status(500).json({ success: false, message: err.message });
+  }
+};
+
+module.exports = toDeleteTask
