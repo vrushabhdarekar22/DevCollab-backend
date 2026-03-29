@@ -2,8 +2,8 @@ const Task = require("../../models/task")
 
 async function toDeleteTask(req, res) {
   try {
-    const { taskId } = req.params;
-    const userId = req.user.id;
+    const taskId = req.params.taskId || req.query.taskId;
+    const userId = req.user._id || req.user.id;
 
     const task = await Task.findById(taskId);
 

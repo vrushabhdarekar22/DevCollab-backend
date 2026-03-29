@@ -1,5 +1,5 @@
-const Route=require('express');
-const router=Route();
+const express = require('express');
+const router = express.Router();
 
 const {checkForAuthorization}=require('../middlewares/authorization');
 
@@ -10,15 +10,26 @@ const {toViewRequest} = require("../controllers/project/viewRequest");
 const {toAcceptRequest} = require("../controllers/project/acceptRequest");
 const {toRejectRequest} = require("../controllers/project/rejectRequest");
 
+const {getExploreProjects} = require("../controllers/project/getProjects");
+const {getJoinedProjects} = require("../controllers/project/getJoinedProjects");
+const {getOwnedProjects} = require("../controllers/project/getOwnedProjects");
+const {getRequests} = require("../controllers/project/getRequests");
 
 router.post('/create-project',toCreateProject);
 router.get('/view-project/:id',toViewProject);//projects/id
 
+router.get('/explore',getExploreProjects);
+router.get('/joined-projects',getJoinedProjects);
+router.get('/owned-projects',getOwnedProjects);
+router.get('/requests', getRequests);
 
 router.post('/send-request',toSendRequest);
-router.get('/view-request/:id',checkForAuthorization, toViewRequest);//project request only owner can see
-router.post('/accept-request/:id/:userId',checkForAuthorization,toAcceptRequest);
-router.post('/reject-request/:id/:userId',checkForAuthorization, toRejectRequest);
+// router.get('/view-request/:id',checkForAuthorization, toViewRequest);//project request only owner can see
+router.get('/view-request/:id', toViewRequest);//project request only owner can see
+// router.post('/accept-request/:id/:userId',checkForAuthorization,toAcceptRequest);
+// router.post('/reject-request/:id/:userId',checkForAuthorization, toRejectRequest);
+router.post('/accept-request/:id/:userId',toAcceptRequest);
+router.post('/reject-request/:id/:userId', toRejectRequest);
 
 
 module.exports=router;

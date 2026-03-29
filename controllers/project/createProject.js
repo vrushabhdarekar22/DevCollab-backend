@@ -10,10 +10,11 @@ async function toCreateProject(req,res){
         }
 
         // console.log(req.user);
-        const {title,description}=req.body;
+        const {title,description,techStack}=req.body;
         const project=await Project.create({
             title,
             description,
+            techStack,
             createdBy:req.user._id,
             members: [{
                 user: req.user._id,

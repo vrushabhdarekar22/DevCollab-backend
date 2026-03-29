@@ -11,9 +11,14 @@ const User=require('../models/user');
         
         try{
             const decoded = verifyToken(tokenCookieValue);
+            if (!decoded) {
+                return next();
+            }
             const user = await User.findById(decoded._id);
             req.user = user;
-        }catch(err) {}
+        }catch(err) {
+            console.error('Authentication error:', err);
+        }
 
         return next();
     }

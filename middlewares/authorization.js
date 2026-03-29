@@ -1,5 +1,5 @@
 // const Project=require('../models/project');
-async function checkForAuthorization (req,res,next){
+function checkForAuthorization (req,res,next){
     const projectId=req.params.id;
     const User=req.user;
 
@@ -13,11 +13,10 @@ async function checkForAuthorization (req,res,next){
             return next();
         }
 
-
         return res.status(403).json({error:'Forbidden:Not Project admin '});
     }catch(error){
         console.error('Admin check failed',error);
-        res.status(500).json({ error: "Internal Server Error" });
+        return res.status(500).json({ error: "Internal Server Error" });
     }
 }
 

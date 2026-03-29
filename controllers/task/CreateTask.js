@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Task = require("../../models/task")
 const Project = require("../../models/project")
 
@@ -13,7 +14,7 @@ async function toCreateTask(req, res) {
             attachments
         } = req.body;
 
-        const userId = req.user.id;
+        const userId = req.user._id || req.user.id;
 
         if (!title || !description || !projectId || !assignedTo || !priority || !dueDate) {
             return res.status(400).json({ success: false, message: "All fields required" });
@@ -33,12 +34,16 @@ async function toCreateTask(req, res) {
         }
 
         // Only owner can create task
-        if (project.owner.toString() !== userId) {
+        if (project.createdBy.toString() !== userId.toString()) {
             return res.status(403).json({ success: false, message: "Not authorized" });
         }
 
         // Check assigned user is member
-        if (!project.members.includes(assignedTo)) {
+        const isAssignedMember = project.members.some(
+          (member) => member.user.toString() === assignedTo.toString()
+        );
+
+        if (!isAssignedMember) {
             return res.status(400).json({ success: false, message: "User not in project" });
         }
 

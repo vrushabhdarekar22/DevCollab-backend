@@ -1,12 +1,18 @@
+const mongoose = require("mongoose");
 const Task = require("../../models/task")
 const Project = require("../../models/project")
 
-async function toGetTasks(req, res) {
+async function toGetTask(req, res) {
     try {
-        const { projectId } = req.params;
+        const { projectId } = req.query;
         const { status, priority, search } = req.query;
 
-        let query = { projectId };
+        if (projectId && !mongoose.Types.ObjectId.isValid(projectId)) {
+            return res.status(400).json({ success: false, message: "Invalid projectId" });
+        }
+
+        const query = {};
+        if (projectId) query.projectId = projectId;
 
         if (status) query.status = status;
         if (priority) query.priority = priority;
@@ -16,7 +22,7 @@ async function toGetTasks(req, res) {
         }
 
         const tasks = await Task.find(query)
-            .populate("assignedTo", "name email")
+            .populate("assignedTo", "fullName email")
             .sort({ createdAt: -1 });
 
         return res.status(200).json({
@@ -29,4 +35,4 @@ async function toGetTasks(req, res) {
     }
 };
 
-module.exports = toGetTasks;
+module.exports = toGetTask;

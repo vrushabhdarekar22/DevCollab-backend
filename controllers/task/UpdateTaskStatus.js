@@ -3,9 +3,9 @@ const Project = require("../../models/project")
 
 async function toUpdateTaskStatus(req, res) {
   try {
-    const { taskId } = req.params;
+    const taskId = req.params.taskId || req.query.taskId;
     const { status } = req.body;
-    const userId = req.user.id;
+    const userId = req.user._id || req.user.id;
 
     if (!["todo", "in-progress", "completed"].includes(status)) {
       return res.status(400).json({ success: false, message: "Invalid status" });
@@ -17,11 +17,13 @@ async function toUpdateTaskStatus(req, res) {
       return res.status(404).json({ success: false, message: "Task not found" });
     }
 
-    // Only assigned user OR owner can update
-    if (
-      task.assignedTo.toString() !== userId &&
-      task.createdBy.toString() !== userId
-    ) {
+    // Only assigned user, task creator, or project owner can update
+    const project = await Project.findById(task.projectId);
+    // const isAssignedUser = task.assignedTo?.toString() === userId.toString();
+    const isTaskCreator = task.createdBy?.toString() === userId.toString();
+    const isProjectOwner = project?.createdBy?.toString() === userId.toString();
+
+    if (!isTaskCreator && !isProjectOwner) {
       return res.status(403).json({ success: false, message: "Not allowed" });
     }
 
