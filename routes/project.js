@@ -14,6 +14,7 @@ const {getExploreProjects} = require("../controllers/project/getProjects");
 const {getJoinedProjects} = require("../controllers/project/getJoinedProjects");
 const {getOwnedProjects} = require("../controllers/project/getOwnedProjects");
 const {getRequests} = require("../controllers/project/getRequests");
+const {getMessages} = require("../controllers/project/getMessages");
 
 router.post('/create-project',toCreateProject);
 router.get('/view-project/:id',toViewProject);//projects/id
@@ -22,6 +23,7 @@ router.get('/explore',getExploreProjects);
 router.get('/joined-projects',getJoinedProjects);
 router.get('/owned-projects',getOwnedProjects);
 router.get('/requests', getRequests);
+router.get('/messages/:projectId', getMessages);
 
 router.post('/send-request',toSendRequest);
 // router.get('/view-request/:id',checkForAuthorization, toViewRequest);//project request only owner can see
